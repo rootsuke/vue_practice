@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>2-1</title>
+	<link rel="stylesheet" href="">
+	<script src="vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<input type="text" v-on:input="changeGreeting"></input>
+		<h1 v-once>{{ greeting }}</h1>
+		<p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>
+		<hr>
+		<p v-html="finishedLink"></p>
+	</div>
+	<script>
+	// You may of course also outsource this script code into a separate file (e.g. app.js) and simply import this file here
+		new Vue({
+			el: '#app',
+			data: {
+				greeting: 'Hello World!',
+				link: 'https://www.google.com',
+				finishedLink: '<a href="https://twitter.com">Twitter</a>'
+			},
+			methods: {
+				changeGreeting: function(event) {
+					this.greeting = event.target.value;
+				},
+				sayHello: function() {
+					this.greeting = "hoge"
+					return this.greeting;
+				}
+			}
+		})
+	</script>
+</body>
+</html>
