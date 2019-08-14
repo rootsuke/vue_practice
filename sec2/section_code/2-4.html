@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>2-4</title>
+  <link rel="stylesheet" href="style.css">
+	<script src="vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div class="demo" @click="attachRed = !attachRed" :class="{red: attachRed}"></div>
+    <div class="demo" :class="divClasses"></div>
+    <div class="demo" :class="[color, divClasses]"></div>
+    <div class="demo" :style="[myStyle, {height: width + 'px'}]"></div>
+    <hr>
+    <input type="text" v-model="color">
+    <input type="text" v-model="width">
+  </div>
+</body>
+
+<script>
+  new Vue({
+    el: "#app",
+    data: {
+      attachRed: false,
+      color: "gray",
+      width: 100
+    },
+    computed: {
+      divClasses: function() {
+        return {
+          red: this.attachRed,
+          blue: !this.attachRed
+        }
+      },
+      myStyle: function() {
+        return {
+          'background-color': this.color,
+          width: this.width + "px"
+        }
+      }
+    }
+  });
+</script>
