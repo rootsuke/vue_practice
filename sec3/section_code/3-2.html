@@ -1,0 +1,43 @@
+<script src="vue.js"></script>
+
+<div id="app">
+  <ul>
+    <li v-for="(ingredient, i) in ingredients">
+      <p :style="style" @click="fontsize += 2">{{ ingredient }} ({{ i + 1 }})</p>
+    </li>
+  </ul>
+  <button @click="ingredients.push('spice')">add</button>
+  <hr>
+  <ul>
+    <li v-for="person in persons">
+      <div v-for="(value, key, index) in person">{{ key }}: {{ name }} ({{ index + 1 }})</div>
+    </li>
+  </ul>
+   <span v-for="n in 10">{{ n }}</span>
+  <hr>
+  <template v-for="(ingredient, index) in ingredients">
+    <h1>{{ ingredient }}</h1>
+    <p>{{ index }}</p>
+  </template>
+</div>
+
+<script>
+	new Vue({
+		el: "#app",
+		data: {
+      ingredients: ['meat', 'fruit', 'cookie'],
+      persons: [
+        {name: 'Max', age: 27, color: 'red'},
+        {name: 'Anna', age: 'unknown', color: 'blue'}
+      ],
+      fontsize: 12
+    },
+    computed: {
+      style: function() {
+        return {
+          fontSize: this.fontsize + 'px'
+        }
+      }
+    },
+	});
+</script>
