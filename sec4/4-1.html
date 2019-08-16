@@ -42,8 +42,8 @@
     <section class="row log">
         <div class="small-12 columns">
             <ul>
-                <li>
-
+                <li v-for="(message, i) in messages" :key="message" :class="i % 2 == 0 ? 'monster-turn' : 'player-turn'">
+                    {{ message }}
                 </li>
             </ul>
         </div>
@@ -60,7 +60,7 @@
                 player: 100,
                 monster : 100
             },
-            message: []
+            messages: []
         },
         computed: {
             player_healthbar_width: function() {
@@ -92,28 +92,34 @@
             attack: function() {
                 min_damage = 5;
                 max_damage = 10;
-                this.calc_damage(min_damage, max_damage);
+                this.playerAttack(min_damage, max_damage);
+                this.monsterAttack(min_damage, max_damage);
             },
             specialAttack: function() {
                 min_damage = 5;
                 max_damage = 20;
-                this.calc_damage(min_damage, max_damage);
-            },
-            calc_damage: function(min, max) {
-                for(key in this.width) {
-                    damage = Math.round(Math.random() * (max - min)) + min;
-                    this.width[key] -= damage;
-                }
+                this.playerAttack(min_damage, max_damage);
+                this.monsterAttack(min_damage, max_damage);
             },
             heal: function() {
-                min_damage = 5;
-                max_damage = 10;
-                damage = Math.round(Math.random() * (max_damage - min_damage)) + min_damage;
-                this.width.player -= damage;
-                min_heal = 7;
+                min_heal = 4;
                 max_heal = 12;
                 heal = Math.round(Math.random() * (max_heal - min_heal)) + min_heal;
                 this.width.player += heal;
+                this.messages.unshift("PLAYER HEALS HIMSELF" + heal);
+                min_damage = 5;
+                max_damage = 10;
+                this.monsterAttack(min_damage, max_damage);
+            },
+            monsterAttack: function(min, max) {
+                damage_to_player = Math.round(Math.random() * (max - min)) + min;
+                this.width.player -= damage_to_player;
+                this.messages.unshift("MONSTER HITS PLAYER" + damage_to_player);
+            },
+            playerAttack: function(min, max) {
+                damage_to_monster = Math.round(Math.random() * (max - min)) + min;
+                this.width.monster -= damage_to_monster;
+                this.messages.unshift("PLAYER HITS MONSTER" + damage_to_monster);
             },
             giveUp: function() {
 
