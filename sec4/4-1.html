@@ -12,16 +12,16 @@
         <div class="small-6 columns">
             <h1 class="text-center">YOU</h1>
             <div class="healthbar">
-                <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                <div :style="{width: player_healthbar_width + '%'}" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+                    <p>{{ player_healthbar_width }}</p>
                 </div>
             </div>
         </div>
         <div class="small-6 columns">
             <h1 class="text-center">MONSTER</h1>
             <div class="healthbar">
-                <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                <div :style="{width: monster_healthbar_width + '%'}" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+                    <p>{{ monster_healthbar_width }}</p>
                 </div>
             </div>
         </div>
@@ -51,3 +51,42 @@
 </div>
 </body>
 </html>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            width: {
+                player: 100,
+                monster : 100
+            },
+            message: []
+        },
+        computed: {
+            player_healthbar_width: function() {
+                var width = this.width.player;
+                if (width >= 0 && width <= 100) {
+                    return width
+                } else if (width < 0) {
+                    width = 0;
+                    return width;
+                } else {
+                    width = 100;
+                    return width;
+                }
+            },
+            monster_healthbar_width: function() {
+                var width = this.width.monster;
+                if (width >= 0 && width <= 100) {
+                    return width
+                } else if (width < 0) {
+                    width = 0;
+                    return width;
+                } else {
+                    width = 100;
+                    return width;
+                }
+            }
+        }
+    })
+</script>
