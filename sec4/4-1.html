@@ -26,12 +26,12 @@
             </div>
         </div>
     </section>
-    <section class="row controls">
+    <section class="row controls" v-if="start_new_game">
         <div class="small-12 columns">
-            <button id="start-game">START NEW GAME</button>
+            <button id="start-game" @click="initGame">START NEW GAME</button>
         </div>
     </section>
-    <section class="row controls">
+    <section class="row controls" v-else>
         <div class="small-12 columns">
             <button @click="attack" id="attack">ATTACK</button>
             <button @click="specialAttack" id="special-attack">SPECIAL ATTACK</button>
@@ -39,7 +39,7 @@
             <button @click="giveUp" id="give-up">GIVE UP</button>
         </div>
     </section>
-    <section class="row log">
+    <section class="row log" v-if="messages.length != 0">
         <div class="small-12 columns">
             <ul>
                 <li v-for="(message, i) in messages" :key="message" :class="i % 2 == 0 ? 'monster-turn' : 'player-turn'">
@@ -60,7 +60,8 @@
                 player: 100,
                 monster : 100
             },
-            messages: []
+            messages: [],
+            start_new_game: true
         },
         computed: {
             player_healthbar_width: function() {
@@ -122,7 +123,13 @@
                 this.messages.unshift("PLAYER HITS MONSTER" + damage_to_monster);
             },
             giveUp: function() {
-
+                this.start_new_game = true;
+            },
+            initGame: function() {
+                this.width.player = 100;
+                this.width.monster = 100;
+                this.messages = [];
+                this.start_new_game = false;
             }
         }
     })
