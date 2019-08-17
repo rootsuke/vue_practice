@@ -12,16 +12,16 @@
         <div class="small-6 columns">
             <h1 class="text-center">YOU</h1>
             <div class="healthbar">
-                <div :style="{width: player_healthbar_width + '%'}" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-                    <p>{{ player_healthbar_width }}</p>
+                <div :style="{width: player_healthbar + '%'}" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+                    <p>{{ player_healthbar }}</p>
                 </div>
             </div>
         </div>
         <div class="small-6 columns">
             <h1 class="text-center">MONSTER</h1>
             <div class="healthbar">
-                <div :style="{width: monster_healthbar_width + '%'}" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-                    <p>{{ monster_healthbar_width }}</p>
+                <div :style="{width: monster_healthbar + '%'}" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+                    <p>{{ monster_healthbar }}</p>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
             start_new_game: true
         },
         computed: {
-            player_healthbar_width: function() {
+            player_healthbar: function() {
                 var width = this.width.player;
                 if (width >= 0 && width <= 100) {
                     return width
@@ -76,7 +76,7 @@
                     return width;
                 }
             },
-            monster_healthbar_width: function() {
+            monster_healthbar: function() {
                 var width = this.width.monster;
                 if (width >= 0 && width <= 100) {
                     return width
@@ -91,34 +91,44 @@
         },
         methods: {
             attack: function() {
-                min_damage = 5;
-                max_damage = 10;
+                var min_damage = 5;
+                var max_damage = 10;
                 this.playerAttack(min_damage, max_damage);
+                if (this.checkWin()) {
+                    return;
+                }
                 this.monsterAttack(min_damage, max_damage);
             },
             specialAttack: function() {
-                min_damage = 5;
-                max_damage = 20;
+                var min_damage = 5;
+                var max_damage = 20;
                 this.playerAttack(min_damage, max_damage);
+                if (this.checkWin()) {
+                    return;
+                }
                 this.monsterAttack(min_damage, max_damage);
             },
             heal: function() {
-                min_heal = 4;
-                max_heal = 12;
-                heal = Math.round(Math.random() * (max_heal - min_heal)) + min_heal;
+                var min_heal = 4;
+                var max_heal = 12;
+                var heal = Math.round(Math.random() * (max_heal - min_heal)) + min_heal;
                 this.width.player += heal;
                 this.messages.unshift("PLAYER HEALS HIMSELF" + heal);
-                min_damage = 5;
-                max_damage = 10;
+                if (this.checkWin()) {
+                    return;
+                }
+                var min_damage = 5;
+                var max_damage = 10;
                 this.monsterAttack(min_damage, max_damage);
             },
             monsterAttack: function(min, max) {
-                damage_to_player = Math.round(Math.random() * (max - min)) + min;
+                var damage_to_player = Math.round(Math.random() * (max - min)) + min;
                 this.width.player -= damage_to_player;
                 this.messages.unshift("MONSTER HITS PLAYER" + damage_to_player);
+                this.checkWin();
             },
             playerAttack: function(min, max) {
-                damage_to_monster = Math.round(Math.random() * (max - min)) + min;
+                var damage_to_monster = Math.round(Math.random() * (max - min)) + min;
                 this.width.monster -= damage_to_monster;
                 this.messages.unshift("PLAYER HITS MONSTER" + damage_to_monster);
             },
@@ -130,6 +140,24 @@
                 this.width.monster = 100;
                 this.messages = [];
                 this.start_new_game = false;
+            },
+            checkWin: function() {
+                if (this.width.monster <= 0) {
+                    if (confirm('You Win! New Game?')) {
+                        this.initGame;
+                    } else {
+                        this.start_new_game = true;
+                    }
+                    return true;
+                } else if (this.width.player <= 0) {
+                    if (confirm('You Lose! New Game?')) {
+                        this.initGame;
+                    } else {
+                        this.start_new_game = true;
+                    }
+                    return true;
+                }
+                return false;
             }
         }
     })
